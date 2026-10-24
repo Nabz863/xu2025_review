@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+runs/*.log
+runs/*.out
+runs/ALL_DONE
+tex/*.aux
+tex/*.log
+tex/*.bbl
+tex/*.blg
+tex/*.out

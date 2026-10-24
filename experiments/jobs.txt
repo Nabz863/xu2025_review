@@ -1,0 +1,35 @@
+# name | flags   (THEIRS / THEIRS15 / THEIRS5 / RECON are expanded by run_all.sh)
+A_recon_s0 | RECON --seed 0
+A_recon_s1 | RECON --seed 1
+A_recon_s2 | RECON --seed 2
+A_recon_s3 | RECON --seed 3
+A_recon_s4 | RECON --seed 4
+A_recon_s5 | RECON --seed 5
+C_lrconst_s0 | THEIRS --lr_schedule constant --seed 0
+C_lrconst_s1 | THEIRS --lr_schedule constant --seed 1
+C_lrconst_s2 | THEIRS --lr_schedule constant --seed 2
+C_lossmean_s0 | THEIRS --loss_scale 1 --seed 0
+C_lossmean_s1 | THEIRS --loss_scale 1 --seed 1
+C_lossmean_s2 | THEIRS --loss_scale 1 --seed 2
+B_headings_s0 | THEIRS --K 144 --heading_interp --continuous_heading --seed 0
+B_headings_s1 | THEIRS --K 144 --heading_interp --continuous_heading --seed 1
+B_vinit_s0 | THEIRS --v_init uniform --seed 0
+B_vinit_s1 | THEIRS --v_init uniform --seed 1
+B_Binit_s0 | THEIRS --B_init he --seed 0
+B_Binit_s1 | THEIRS --B_init he --seed 1
+B_lattice_s0 | THEIRS --lattice corners --seed 0
+B_lattice_s1 | THEIRS --lattice corners --seed 1
+B_dxlength_s0 | THEIRS --radius_uniform --seed 0
+B_dxlength_s1 | THEIRS --radius_uniform --seed 1
+B_boundary_s0 | THEIRS --leave_square --seed 0
+B_boundary_s1 | THEIRS --leave_square --seed 1
+B_lam1_s0 | THEIRS --lam 1 --seed 0
+B_lam1_s1 | THEIRS --lam 1 --seed 1
+B_noclip_s0 | THEIRS --grad_clip 0 --seed 0
+B_noclip_s1 | THEIRS --grad_clip 0 --seed 1
+C_s15code_s0 | THEIRS15 --D 1.125 --seed 0
+C_s15code_s1 | THEIRS15 --D 1.125 --seed 1
+C_s15paper_s0 | THEIRS15 --D 1.25 --seed 0
+C_s15paper_s1 | THEIRS15 --D 1.25 --seed 1
+C_s5_s0 | THEIRS5 --seed 0
+base_seed0 | --seed 0

@@ -1,0 +1,139 @@
+diff --git a/experiment.py b/experiment.py
+index 48037b7..0d772e3 100644
+--- a/experiment.py
++++ b/experiment.py
+@@ -14,7 +14,7 @@ import input_pipeline
+ import model as model
+ import utils
+ 
+-torch.manual_seed(1118)
++torch.manual_seed(1118 + int(__import__("os").environ.get("SEED", 0)))
+ 
+ class Experiment:
+   def __init__(self, config: ml_collections.ConfigDict, device):
+diff --git a/main.py b/main.py
+index 855a1b7..35c8825 100644
+--- a/main.py
++++ b/main.py
+@@ -22,7 +22,7 @@ def main(argv):
+   del argv
+   config = FLAGS.config
+ 
+-  np.random.seed(0)
++  np.random.seed(int(__import__("os").environ.get("SEED", 0)))
+ 
+   # config workdir
+   if FLAGS.mode == "train":
+diff --git a/model.py b/model.py
+index 486da70..1eec280 100644
+--- a/model.py
++++ b/model.py
+@@ -53,7 +53,7 @@ class GridCell(nn.Module):
+   def _loss_trans(self, x, x_plus_dx):
+     config = self.config
+     if config.w_trans == 0:
+-      return torch.zeros([]).to(x.get_device())
++      z = torch.zeros([]).to(x.device); return z, z, z
+ 
+     v_x = self.encoder(x)
+     v_x_plus_dx = self.encoder(x_plus_dx)
+@@ -70,7 +70,7 @@ class GridCell(nn.Module):
+   def _loss_isometry_numerical_scale(self, x, x_plus_dx1, x_plus_dx2):
+     config = self.config
+     if config.w_isometry == 0:
+-      return torch.zeros([]).to(x.get_device())
++      return torch.zeros([]).to(x.device)
+ 
+     x_plus_dx = x_plus_dx1
+     num_block = config.num_neurons // config.module_size
+@@ -81,14 +81,14 @@ class GridCell(nn.Module):
+     v_x = self.encoder(x).reshape((-1, num_block, config.module_size))
+     v_x_plus_dx = self.encoder(x_plus_dx).reshape((-1, num_block, config.module_size))
+ 
+-    loss = torch.zeros([]).to(x.get_device())
++    loss = torch.zeros([]).to(x.device)
+     
+     for i in range(num_block):
+       v_x_i = v_x[:, i]
+       v_x_plus_dx_i = v_x_plus_dx[:, i]
+ 
+       sum_square_norm = torch.sqrt(torch.sum((v_x_plus_dx_i - v_x_i)**2, dim=-1))
+-      scale = self.trans.s_fixed.to(x.get_device())
++      scale = self.trans.s_fixed.to(x.device)
+       loss += torch.sum((sum_square_norm - scale * dx_norm) ** 2)
+     
+     return loss * config.w_isometry
+diff --git a/utils.py b/utils.py
+index 99bbcb1..f0ed6cb 100644
+--- a/utils.py
++++ b/utils.py
+@@ -39,7 +39,7 @@ def draw_trajs(real_trajs, pred_trajs, area_size: int):
+       _draw_real_pred_pairs(real_trajs[j], pred_trajs[j], area_size)
+ 
+   fig.canvas.draw()
+-  image_from_plot = np.frombuffer(fig.canvas.tostring_rgb(), dtype=np.uint8)
++  image_from_plot = np.asarray(fig.canvas.buffer_rgba())[..., :3].reshape(-1)
+   image_from_plot = image_from_plot.reshape(
+       fig.canvas.get_width_height()[::-1] + (3,))
+   plt.close(fig)
+@@ -77,14 +77,14 @@ def draw_heatmap(weights):
+       weight = weights[i, j]
+       vmin, vmax = weight.min() - 0.01, weight.max()
+ 
+-      cmap = cm.get_cmap('rainbow', 1000)
++      cmap = __import__('matplotlib').colormaps['rainbow'].resampled(1000)
+       cmap.set_under('w')
+ 
+       plt.imshow(weight, interpolation='nearest', cmap=cmap, aspect='auto', vmin=vmin, vmax=vmax)
+       plt.axis('off')
+ 
+   fig.canvas.draw()
+-  image_from_plot = np.frombuffer(fig.canvas.tostring_rgb(), dtype=np.uint8)
++  image_from_plot = np.asarray(fig.canvas.buffer_rgba())[..., :3].reshape(-1)
+   image_from_plot = image_from_plot.reshape(
+       fig.canvas.get_width_height()[::-1] + (3,))
+   # plt.show()
+@@ -104,14 +104,14 @@ def save_heatmap(weights, name):
+       weight = weights[i, j]
+       vmin, vmax = weight.min() - 0.01, weight.max()
+ 
+-      cmap = cm.get_cmap('rainbow', 1000)
++      cmap = __import__('matplotlib').colormaps['rainbow'].resampled(1000)
+       cmap.set_under('w')
+ 
+       plt.imshow(weight, interpolation='nearest', cmap=cmap, aspect='auto', vmin=vmin, vmax=vmax)
+       plt.axis('off')
+ 
+   fig.canvas.draw()
+-  image_from_plot = np.frombuffer(fig.canvas.tostring_rgb(), dtype=np.uint8)
++  image_from_plot = np.asarray(fig.canvas.buffer_rgba())[..., :3].reshape(-1)
+   image_from_plot = image_from_plot.reshape(
+       fig.canvas.get_width_height()[::-1] + (3,))
+   plt.savefig(name)
+@@ -271,7 +271,7 @@ def draw_heatmap_2D(data, vmin=None, vmax=None, shape='square', cb=False):
+     vmax = data[place_mask].max()
+   # data[~place_mask] = vmin - 1
+ 
+-  cmap = cm.get_cmap('rainbow', 1000)
++  cmap = __import__('matplotlib').colormaps['rainbow'].resampled(1000)
+   cmap.set_under('w')
+   plt.imshow(data, interpolation='nearest', cmap=cmap,
+              aspect='auto', vmin=vmin, vmax=vmax)
+@@ -385,7 +385,7 @@ def draw_two_path(place_len, place_gt, place_pd):
+ 
+ def draw_path_integral(place_len, place_seq, col=(255, 0, 0)):
+   place_seq = np.round(place_seq).astype(int)
+-  cmap = cm.get_cmap('rainbow', 1000)
++  cmap = __import__('matplotlib').colormaps['rainbow'].resampled(1000)
+ 
+   canvas = np.ones((place_len, place_len, 3), dtype="uint8") * 255
+   if target is not None:
+@@ -402,7 +402,7 @@ def draw_path_integral(place_len, place_seq, col=(255, 0, 0)):
+ 
+ 
+ def draw_path_to_target_gif(file_name, place_len, place_seq, target, col=(255, 0, 0)):
+-  cmap = cm.get_cmap('rainbow', 1000)
++  cmap = __import__('matplotlib').colormaps['rainbow'].resampled(1000)
+   canvas = np.ones((place_len, place_len, 3), dtype="uint8") * 255
+   cv2.circle(canvas, tuple(target), 2, (0, 0, 255), -1)
+   cv2.circle(canvas, tuple(place_seq[0]), 2, col, -1)

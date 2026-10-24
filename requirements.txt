@@ -1,0 +1,5 @@
+torch
+numpy
+scipy
+matplotlib
+neuralplayground @ git+https://github.com/SainsburyWellcomeCentre/NeuralPlayground.git

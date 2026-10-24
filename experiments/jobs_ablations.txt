@@ -1,0 +1,20 @@
+# Fig. 3 ablations (Xu et al. 2025, §3.4): remove one assumption at a time.
+# Run on both the reconstruction (RECON) and the authors' configuration (THEIRS), seeds 0 and 1.
+# Paper's claims: no L1 -> non-hexagonal (3h); no L2 -> patterns disrupted (3f);
+# no normalisation -> disrupted (3g); no non-negativity -> hexagons remain (3a, 3e).
+D_recon_noL1_s0 | RECON --w_iso 0 --seed 0
+D_recon_noL1_s1 | RECON --w_iso 0 --seed 1
+D_recon_noL2_s0 | RECON --lam 0 --seed 0
+D_recon_noL2_s1 | RECON --lam 0 --seed 1
+D_recon_nonorm_s0 | RECON --no-normalize --seed 0
+D_recon_nonorm_s1 | RECON --no-normalize --seed 1
+D_recon_nononneg_s0 | RECON --no-nonneg --seed 0
+D_recon_nononneg_s1 | RECON --no-nonneg --seed 1
+D_theirs_noL1_s0 | THEIRS --w_iso 0 --seed 0
+D_theirs_noL1_s1 | THEIRS --w_iso 0 --seed 1
+D_theirs_noL2_s0 | THEIRS --lam 0 --seed 0
+D_theirs_noL2_s1 | THEIRS --lam 0 --seed 1
+D_theirs_nonorm_s0 | THEIRS --no-normalize --seed 0
+D_theirs_nonorm_s1 | THEIRS --no-normalize --seed 1
+D_theirs_nononneg_s0 | THEIRS --no-nonneg --seed 0
+D_theirs_nononneg_s1 | THEIRS --no-nonneg --seed 1

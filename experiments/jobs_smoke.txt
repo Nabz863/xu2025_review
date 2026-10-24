@@ -1,0 +1,7 @@
+# smoke test: one job of each kind
+A_recon_s0 | RECON --seed 0
+C_lrconst_s0 | THEIRS --lr_schedule constant --seed 0
+B_headings_s0 | THEIRS --K 144 --heading_interp --continuous_heading --seed 0
+C_s15paper_s0 | THEIRS15 --D 1.25 --seed 0
+C_s5_s0 | THEIRS5 --seed 0
+base_seed0 | --seed 0
