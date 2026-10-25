@@ -44,8 +44,9 @@ FILES
   experiments/make_figures.py  builds the appendix figures from the run folders
   experiments/score_authors.py scores checkpoints from the authors' released code with gridscore.py
   experiments/jobs_ablations.txt  the paper's Fig. 3 ablations (Part 4)
+  experiments/jobs_nonlinear.txt  nonlinear model 1 (ReLU) on the reconstruction (Part 5)
   authors_code/changes_to_released_code.diff  every change needed to run the authors' repository
-  authors_code/authors_scores.json            scores of our 13 runs of the authors' released code
+  authors_code/authors_scores.json            scores of our 15 runs of the authors' released code
   tex/review.tex, tex/ccn_style.bib, tex/ccn.sty   the review itself (figures are read from figures/)
   runs/                        seed-study runs already done (paper text only, authors' configuration)
   archive/                     development runs and log from building the codebase
@@ -73,4 +74,4 @@ THE AUTHORS' RELEASED CODE (github.com/DehongXu/grid-cell-conformal-isometry)
     python experiments/score_authors.py ../authors_runs
     cp ../authors_runs/authors_scores.json authors_code/      # make_figures.py reads it from here
   Run time: about 2 minutes per run on an RTX 4060 laptop GPU, about 11 minutes on one CPU
-  (we ran 2 seeds on the GPU and the other 11 runs on CPU).
+  (we ran 2 seeds on the GPU and the other 13 runs on CPU).

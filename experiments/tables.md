@@ -45,3 +45,22 @@ Paper's claims: removing L1 gives non-hexagonal patterns (Fig. 3h); removing L2 
 | Authors' configuration, no transformation loss (L2) | **2 / 2** | 0.52 / 0.46 | 65 | 3.26 | 3.54 |
 | Authors' configuration, no normalisation | **0 / 2** | -0.02 / 0.23 | 6 | 1.66 | 4.33 |
 | Authors' configuration, no non-negativity | **1 / 2** | 0.46 / 0.30 | 52 | 1.45 | 4.66 |
+
+## Part 5. Nonlinear model 1 (ReLU), on the reconstruction (seeds 0, 1)
+
+| Condition | Hexagonal runs | Annulus gridness per seed | Mean valid % | Mean final L1 (×10⁻³) | s × scale |
+|---|---|---|---|---|---|
+| Reconstruction, nonlinear model 1 (ReLU) | **1 / 2** | -0.86 / 1.33 | 48 | 3.28 | 3.43 |
+
+## Part 6. The authors' released code, run directly
+
+| Condition | Hexagonal runs | Annulus gridness per seed | Mean valid % | Median spacing (fraction of arena) |
+|---|---|---|---|---|
+| Linear, s = 10 (seeds 0–2) | **3 / 3** | 1.67 / 1.66 / 1.63 | 100 | 0.327 |
+| Linear, s = 5 | **1 / 1** | 1.31 | 100 | 0.673 |
+| Linear, s = 15 | **1 / 1** | 1.17 | 100 | 0.230 |
+| No conformal isometry loss (L1) | **0 / 2** | -0.20 / -0.19 | 4 | 0.964 |
+| No transformation loss (L2) | **2 / 2** | 0.66 / 0.77 | 67 | 0.356 |
+| No normalisation | **1 / 2** | 0.28 / 1.43 | 65 | 0.406 |
+| No non-negativity | **1 / 2** | -0.16 / 0.42 | 27 | 0.453 |
+| Nonlinear model 1 (ReLU), s = 10 | **1 / 2** | 1.50 / -0.64 | 50 | 0.342 |

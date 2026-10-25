@@ -79,3 +79,34 @@ for base, label in [("recon", "Reconstruction"), ("theirs", "Authors' configurat
     for key, what in [("noL1", "no conformal isometry loss (L1)"), ("noL2", "no transformation loss (L2)"),
                       ("nonorm", "no normalisation"), ("nononneg", "no non-negativity")]:
         print(group_row(f"{label}, {what}", [f"D_{base}_{key}_s0", f"D_{base}_{key}_s1"]))
+
+print("\n## Part 5. Nonlinear model 1 (ReLU), on the reconstruction (seeds 0, 1)\n")
+print(HEAD)
+print(group_row("Reconstruction, nonlinear model 1 (ReLU)", ["E_recon_nl1_s0", "E_recon_nl1_s1"]))
+
+# The authors' released code, run directly in their repository and scored with gridscore.py
+# (experiments/score_authors.py); the scores are copied to authors_code/authors_scores.json.
+AUTH = RUNS.parent / "authors_code" / "authors_scores.json"
+print("\n## Part 6. The authors' released code, run directly\n")
+if not AUTH.exists():
+    print(f"{AUTH.relative_to(RUNS.parent)} not found: run experiments/score_authors.py and copy it there.")
+else:
+    scores = {r["run"]: r for r in json.loads(AUTH.read_text())}
+    print("| Condition | Hexagonal runs | Annulus gridness per seed | Mean valid % | Median spacing (fraction of arena) |\n|---|---|---|---|---|")
+    for label, names in [("Linear, s = 10 (seeds 0–2)", [f"linear_s10_seed{i}" for i in range(3)]),
+                         ("Linear, s = 5", ["linear_s5_seed0"]),
+                         ("Linear, s = 15", ["linear_s15_seed0"]),
+                         ("No conformal isometry loss (L1)", ["abl_noL1_seed0", "abl_noL1_seed1"]),
+                         ("No transformation loss (L2)", ["abl_noL2_seed0", "abl_noL2_seed1"]),
+                         ("No normalisation", ["abl_nonorm_seed0", "abl_nonorm_seed1"]),
+                         ("No non-negativity", ["abl_nononneg_seed0", "abl_nononneg_seed1"]),
+                         ("Nonlinear model 1 (ReLU), s = 10", ["nonlinear1_relu_seed0", "nonlinear1_relu_seed1"])]:
+        rs = [scores.get(n) for n in names]
+        done = [r for r in rs if r]
+        if not done:
+            print(f"| {label} | not run | | | |")
+            continue
+        hexn = sum(r["gridness_median"] > 0.37 for r in done)
+        per_seed = " / ".join(fmt(r["gridness_median"]) if r else "…" for r in rs)
+        print(f"| {label} | **{hexn} / {len(done)}** | {per_seed} | "
+              f"{fmt(np.mean([r['valid_pct'] for r in done]), 0)} | {fmt(np.mean([r['spacing_median'] for r in done]), 3)} |")
