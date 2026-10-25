@@ -1,0 +1,2 @@
+F_recon_warmup_s1 | RECON --lr_schedule warmup_decay --seed 1
+F_recon_warmup_s4 | RECON --lr_schedule warmup_decay --seed 4

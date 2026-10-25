@@ -1,0 +1,20 @@
+# Seed study (paper text only, and the authors' configuration rebuilt) and the lambda sweep.
+# Already in runs/; first launched from archive/run_seeds.sh, archive/run_ctrl.sh and by hand.
+# Flags recovered from each run's summary.json. Run with: ./experiments/run_all.sh experiments/jobs_seeds_lambda.txt 3
+base_seed1 | --seed 1
+base_seed2 | --seed 2
+base_seed3 | --seed 3
+base_seed4 | --seed 4
+base_seed5 | --seed 5
+ctrl_all_theirs | THEIRS --seed 0
+theirs_seed1 | THEIRS --seed 1
+theirs_seed2 | THEIRS --seed 2
+theirs_seed3 | THEIRS --seed 3
+lam0.1_s0 | --lam 0.1 --seed 0
+lam0.1_s1 | --lam 0.1 --seed 1
+lam0.3_s0 | --lam 0.3 --seed 0
+lam0.3_s1 | --lam 0.3 --seed 1
+lam3_s0 | --lam 3 --seed 0
+lam3_s1 | --lam 3 --seed 1
+lam10_s0 | --lam 10 --seed 0
+lam10_s1 | --lam 10 --seed 1

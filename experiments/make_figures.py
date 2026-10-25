@@ -71,17 +71,20 @@ def smooth(m, f=10):
 
 
 def fig_a1(runs, out):
-    """One hexagonal and one failed reconstruction run, chosen from their scores."""
-    cands = [(f"A_recon_s{i}", gscore(runs / f"A_recon_s{i}")) for i in range(6)]
-    cands = [(n, g) for n, g in cands if g is not None and (runs / n / "checkpoint.pt").exists()]
-    good = [c for c in cands if c[1] > THRESH]
-    bad = [c for c in cands if c[1] <= THRESH]
-    if not good or not bad:
-        print("Fig. A1 skipped: need one hexagonal and one failed reconstruction run with checkpoints."); return
-    picks = [max(good, key=lambda c: c[1]), min(bad, key=lambda c: c[1])]
-    fig, axes = plt.subplots(2, 4, figsize=(6.6, 3.5), gridspec_kw=dict(wspace=0.08, hspace=0.35))
-    for row, (name, g) in enumerate(picks):
-        seed = name.split("_s")[-1]
+    """One run per outcome: hexagons, stripes and a square lattice in the linear model, and the
+    nonlinear model (ReLU) built the same way as the reconstruction."""
+    rows = [("A_recon_s5", "(a) Reconstruction, seed 5: hexagonal"),
+            ("A_recon_s4", "(b) Reconstruction, seed 4: parallel stripes"),
+            ("base_seed1", "(c) Paper text only, seed 1: square lattice"),
+            ("E_recon_nl1_s1", "(d) Nonlinear model 1 (ReLU), seed 1"),
+            ("E_recon_nl1_s0", "(e) Nonlinear model 1 (ReLU), seed 0")]
+    rows = [(n, label, gscore(runs / n)) for n, label in rows]
+    rows = [(n, label, g) for n, label, g in rows if g is not None and (runs / n / "checkpoint.pt").exists()]
+    if not rows:
+        print("Fig. A1 skipped: no run folders with checkpoints found."); return
+    fig, axes = plt.subplots(len(rows), 4, figsize=(6.6, 1.75 * len(rows)), squeeze=False,
+                             gridspec_kw=dict(wspace=0.08, hspace=0.4))
+    for row, (name, label, g) in enumerate(rows):
         v = torch.load(runs / name / "checkpoint.pt", map_location="cpu")["state_dict"]["v"].numpy()
         for k in range(3):
             ax = axes[row, k]
@@ -90,11 +93,12 @@ def fig_a1(runs, out):
         ax = axes[row, 3]
         ax.imshow(smooth(np.nan_to_num(autocorrelogram(v[0].T), nan=-0.5), 5), origin="lower", cmap=MAPS, vmin=-0.5, vmax=1, interpolation="none")
         ax.set_xticks([]); ax.set_yticks([]); [s.set_visible(False) for s in ax.spines.values()]
-        kind = "hexagonal" if g > THRESH else "not hexagonal"
-        axes[row, 0].set_title(f"Seed {seed}: {kind} (median gridness {g:.2f})", loc="left", color=INK)
+        if name.startswith("E_"):   # nonlinear rows: outcome read from the score
+            label += ": hexagonal" if g > THRESH else ": not hexagonal"
+        axes[row, 0].set_title(f"{label} (median gridness {g:.2f})", loc="left", color=INK)
     axes[0, 3].set_title("Autocorrelogram, cell 1", color=INK2, fontsize=7)
     save(fig, out, "figA1_success_vs_failure")
-    print(f"Fig. A1: {picks[0][0]} vs {picks[1][0]}")
+    print("Fig. A1: " + ", ".join(n for n, _, _ in rows))
 
 
 def fig_a2(runs, archive, out):

@@ -45,6 +45,8 @@ FILES
   experiments/score_authors.py scores checkpoints from the authors' released code with gridscore.py
   experiments/jobs_ablations.txt  the paper's Fig. 3 ablations (Part 4)
   experiments/jobs_nonlinear.txt  nonlinear model 1 (ReLU) on the reconstruction (Part 5)
+  experiments/jobs_seeds_lambda.txt  the seed study and the lambda sweep (already in runs/)
+  experiments/jobs_rescue_recon.txt  the warm-up schedule on the reconstruction's failed seeds
   authors_code/changes_to_released_code.diff  every change needed to run the authors' repository
   authors_code/authors_scores.json            scores of our 15 runs of the authors' released code
   tex/review.tex, tex/ccn_style.bib, tex/ccn.sty   the review itself (figures are read from figures/)
