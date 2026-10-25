@@ -30,9 +30,9 @@ RUN EVERYTHING
 
 MAKE THE TABLES AND FIGURES
   python experiments/make_tables.py > experiments/tables.md
-  python experiments/make_figures.py --authors ../authors_runs      # writes figures/figA*.pdf/png
+  python experiments/make_figures.py --authors authors_code         # writes figures/figA*.pdf/png
   make_figures.py also reads the lambda sweep (runs/lam*_s0, lam*_s1) and the authors' scores
-  (authors_scores.json, see below). Missing runs are listed and skipped.
+  (authors_code/authors_scores.json, see below). Missing runs are listed and skipped.
 
 FILES
   model.py                     the model: embedding table, lookup, transformation, losses, sampling
@@ -45,7 +45,8 @@ FILES
   experiments/score_authors.py scores checkpoints from the authors' released code with gridscore.py
   experiments/jobs_ablations.txt  the paper's Fig. 3 ablations (Part 4)
   authors_code/changes_to_released_code.diff  every change needed to run the authors' repository
-  tex/review.tex, tex/ccn_style.bib           the review itself
+  authors_code/authors_scores.json            scores of our 13 runs of the authors' released code
+  tex/review.tex, tex/ccn_style.bib, tex/ccn.sty   the review itself (figures are read from figures/)
   runs/                        seed-study runs already done (paper text only, authors' configuration)
   archive/                     development runs and log from building the codebase
 
@@ -70,3 +71,6 @@ THE AUTHORS' RELEASED CODE (github.com/DehongXu/grid-cell-conformal-isometry)
   Ablations: the same code with each loss or projection switched off in the config.
   Score the checkpoints with the same gridness used for our runs:
     python experiments/score_authors.py ../authors_runs
+    cp ../authors_runs/authors_scores.json authors_code/      # make_figures.py reads it from here
+  Run time: about 2 minutes per run on an RTX 4060 laptop GPU, about 11 minutes on one CPU
+  (we ran 2 seeds on the GPU and the other 11 runs on CPU).

@@ -8,3 +8,4 @@ tex/*.log
 tex/*.bbl
 tex/*.blg
 tex/*.out
+tex/AI_declaration.pdf

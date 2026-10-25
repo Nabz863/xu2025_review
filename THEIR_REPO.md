@@ -1,5 +1,7 @@
 # Running the authors' released code
 
+> **Note:** this is the plan written before the runs. What was actually done (the changes needed, CPU fallback, run times) is in README.txt, section "THE AUTHORS' RELEASED CODE".
+
 Repository: github.com/DehongXu/grid-cell-conformal-isometry (released for PyTorch 1.10.1).
 Purpose: check, with the authors' own code and their own evaluation, whether it reproduces what the paper reports. Our tables use their configuration rebuilt in our codebase; this is the direct check.
 
